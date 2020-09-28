@@ -12,7 +12,7 @@
         {
             "label": "Deploy",
             "type": "shell",
-            "command": "for deployment in A/deployment-A-v1.yaml A/deployment-A-v2.yaml B/deployment-B.yaml C/deployment-C.yaml; do oc apply --filename ${deployment}; done",
+            "command": "for deployment in A/deployment-A-v1.yaml A/deployment-A-v2.yaml A/service.yaml B/deployment-B.yaml C/deployment-C.yaml; do oc apply --filename ${deployment}; done",
             "problemMatcher": []
         },
         {
@@ -48,7 +48,13 @@
         {
             "label": "ALL: New Project and Deploy",
             "type": "shell",
-            "command": "oc new-project ${workspaceFolderBasename}; oc delete limitrange/${workspaceFolderBasename}-core-resource-limits; for deployment in A/deployment-A-v1.yaml A/deployment-A-v2.yaml B/deployment-B.yaml C/deployment-C.yaml; do oc apply --filename ${deployment}; done; for deployment in $(oc get deployments -o jsonpath='{.items[*].metadata.name}'); do oc patch deployment/${deployment} --type=json --patch '[{\"op\":\"add\",\"path\":\"/spec/template/metadata/annotations\",\"value\":{\"sidecar.istio.io/inject\":\"true\"}}]'; done",
+            "command": "oc new-project ${workspaceFolderBasename}; oc delete limitrange/${workspaceFolderBasename}-core-resource-limits; for deployment in A/deployment-A-v1.yaml A/deployment-A-v2.yaml A/service.yaml B/deployment-B.yaml C/deployment-C.yaml; do oc apply --filename ${deployment}; done; for deployment in $(oc get deployments -o jsonpath='{.items[*].metadata.name}'); do oc patch deployment/${deployment} --type=json --patch '[{\"op\":\"add\",\"path\":\"/spec/template/metadata/annotations\",\"value\":{\"sidecar.istio.io/inject\":\"true\"}}]'; done",
+            "problemMatcher": []
+        },
+        {
+            "label": "LOOP: Request Service",
+            "type": "shell",
+            "command": "while true; do curl $(oc get route/microservice-a --output jsonpath='{.spec.port.targetPort}://{.spec.host}'); echo; sleep 1.5s; done",
             "problemMatcher": []
         }
     ]

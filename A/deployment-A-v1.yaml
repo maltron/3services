@@ -30,3 +30,4 @@ spec:
               value: "microservice-b:8081"
             - name: VERSION
               value: "v1"
+              
