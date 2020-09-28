@@ -1,0 +1,55 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "New Project",
+            "type": "shell",
+            "command": "oc new-project ${workspaceFolderBasename}; oc delete limitrange/${workspaceFolderBasename}-core-resource-limits",
+            "problemMatcher": []
+        },
+        {
+            "label": "Deploy",
+            "type": "shell",
+            "command": "for deployment in A/deployment-A-v1.yaml A/deployment-A-v2.yaml B/deployment-B.yaml C/deployment-C.yaml; do oc apply --filename ${deployment}; done",
+            "problemMatcher": []
+        },
+        {
+            "label": "Undeploy",
+            "type": "shell",
+            "command": "for deployment in $(oc get deployments --output jsonpath='{.items[*].metadata.name}'); do oc delete deployment ${deployment}; done",
+            "problemMatcher": []
+        },
+        {
+            "label": "Delete Project",
+            "type": "shell",
+            "command": "oc delete project ${workspaceFolderBasename}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Add into ServiceMesh MemberRoll",
+            "type": "shell",
+            "command": "oc patch servicemeshmemberroll/default --type=json --patch '[{\"op\":\"add\",\"path\":\"/spec/members/0\",\"value\":\"${workspaceFolderBasename}\"}]' --namespace istio-system",
+            "problemMatcher": []
+        },
+        {
+            "label": "Sidecar: Add",
+            "type": "shell",
+            "command": "for deployment in $(oc get deployments -o jsonpath='{.items[*].metadata.name}'); do oc patch deployment/${deployment} --type=json --patch '[{\"op\":\"add\",\"path\":\"/spec/template/metadata/annotations\",\"value\":{\"sidecar.istio.io/inject\":\"true\"}}]'; done",
+            "problemMatcher": []
+        },
+        {
+            "label": "Sidecar: Remove",
+            "type": "shell",
+            "command": "for deployment in $(oc get deployments -o jsonpath='{.items[*].metadata.name}'); do oc patch deployment/${deployment} --type=json --patch '[{\"op\":\"remove\",\"path\":\"/spec/template/metadata/annotations\",\"value\":{\"sidecar.istio.io/inject\":\"true\"}}]'; done",
+            "problemMatcher": []
+        },
+        {
+            "label": "ALL: New Project and Deploy",
+            "type": "shell",
+            "command": "oc new-project ${workspaceFolderBasename}; oc delete limitrange/${workspaceFolderBasename}-core-resource-limits; for deployment in A/deployment-A-v1.yaml A/deployment-A-v2.yaml B/deployment-B.yaml C/deployment-C.yaml; do oc apply --filename ${deployment}; done; for deployment in $(oc get deployments -o jsonpath='{.items[*].metadata.name}'); do oc patch deployment/${deployment} --type=json --patch '[{\"op\":\"add\",\"path\":\"/spec/template/metadata/annotations\",\"value\":{\"sidecar.istio.io/inject\":\"true\"}}]'; done",
+            "problemMatcher": []
+        }
+    ]
+}
