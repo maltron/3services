@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-a-v1
+  labels:
+    app: microservice-a
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-a
+      version: v1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: microservice-a
+        version: v1
+    spec:
+      containers:
+        - name: microservice-a
+          image: quay.io/maltron/microservice:A
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          env:
+            - name: MICROSERVICE
+              value: "microservice-b:8081"
+            - name: VERSION
+              value: "v1"

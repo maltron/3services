@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-c
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-c
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: microservice-c
+    spec:
+      containers:
+        - name: microservice-c
+          image: quay.io/maltron/microservice:C
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
