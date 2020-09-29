@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: microservice-b
+  labels:
+    app: microservice-b
 spec:
   replicas: 1
   selector:
@@ -36,4 +38,3 @@ spec:
     port: 8081
   selector:
     app: microservice-b
-          

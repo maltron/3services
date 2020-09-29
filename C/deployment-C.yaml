@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: microservice-c
+  labels:
+    app: microservice-c
 spec:
   replicas: 1
   selector:
