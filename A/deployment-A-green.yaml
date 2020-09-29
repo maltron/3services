@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservice-a-v1
+  name: microservice-a-green
   labels:
     app: microservice-a
-    version: v1
+    version: green
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: microservice-a
-      version: v1
+      version: green
   template:
     metadata:
       annotations:
         sidecar.istio.io/inject: "true"
       labels:
         app: microservice-a
-        version: v1
+        version: green
     spec:
       containers:
         - name: microservice-a
@@ -29,5 +29,4 @@ spec:
             - name: MICROSERVICE
               value: "microservice-b:8081"
             - name: VERSION
-              value: "v1"
-              
+              value: "green"
