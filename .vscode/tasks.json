@@ -64,9 +64,26 @@
             "problemMatcher": []
         },
         {
-            "label": "Docker Build",
+            "label": "ALL: Docker Build",
+            "dependsOn": [ "A: Docker Build", "B: Docker Build", "C: Docker Build" ],
+            "problemMatcher": [] 
+        },
+        { 
+            "label": "A: Docker Build",
             "type": "shell",
-            "command": "for service in A B C; do docker build --force-rm --rm --no-cache --tag quay.io/maltron/microservice:${service} ${service}; docker push quay.io/maltron/microservice:${service}; done",
+            "command": "docker build --force-rm --rm --no-cache --tag quay.io/maltron/microservice:A A && docker push quay.io/maltron/microservice:A",
+            "problemMatcher": []
+        },
+        { 
+            "label": "B: Docker Build",
+            "type": "shell",
+            "command": "docker build --force-rm --rm --no-cache --tag quay.io/maltron/microservice:B B && docker push quay.io/maltron/microservice:B",
+            "problemMatcher": []
+        },
+        { 
+            "label": "C: Docker Build",
+            "type": "shell",
+            "command": "docker build --force-rm --rm --no-cache --tag quay.io/maltron/microservice:C C && docker push quay.io/maltron/microservice:C",
             "problemMatcher": []
         }
     ]

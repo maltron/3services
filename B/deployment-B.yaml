@@ -25,6 +25,20 @@ spec:
           env:
             - name: MICROSERVICE
               value: "microservice-c:8080"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            timeoutSeconds: 1              
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            timeoutSeconds: 1              
 ---
 apiVersion: v1
 kind: Service

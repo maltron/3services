@@ -30,4 +30,17 @@ spec:
               value: "microservice-b:8081"
             - name: VERSION
               value: "blue"
-              
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8082
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            timeoutSeconds: 1
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8082
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            timeoutSeconds: 1
