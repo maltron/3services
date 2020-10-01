@@ -48,7 +48,8 @@
         {
             "label": "ALL: New Project and Deploy",
             "type": "shell",
-            "command": "oc new-project ${workspaceFolderBasename}; oc delete limitrange/${workspaceFolderBasename}-core-resource-limits; for deployment in A/deployment-A-blue.yaml A/deployment-A-green.yaml A/service.yaml B/deployment-B.yaml C/deployment-C.yaml; do oc apply --filename ${deployment}; done; for deployment in $(oc get deployments -o jsonpath='{.items[*].metadata.name}'); do oc patch deployment/${deployment} --type=json --patch '[{\"op\":\"add\",\"path\":\"/spec/template/metadata/annotations\",\"value\":{\"sidecar.istio.io/inject\":\"true\"}}]'; done; oc expose service/microservice-a",
+            "dependsOrder": "sequence",
+            "dependsOn": [ "Add into ServiceMesh MemberRoll", "New Project", "Deploy", "Gateway -> VirtualService -> DestinationRule" ],
             "problemMatcher": []
         },
         {
@@ -84,6 +85,12 @@
             "label": "C: Docker Build",
             "type": "shell",
             "command": "docker build --force-rm --rm --no-cache --tag quay.io/maltron/microservice:C C && docker push quay.io/maltron/microservice:C",
+            "problemMatcher": []
+        },
+        {
+            "label": "Gateway -> VirtualService -> DestinationRule",
+            "type": "shell",
+            "command": "sed 's/microservice.apps.cluster-.*.opentlc.com/microservice.'$(oc get route/kiali --output=jsonpath=\"{.spec.host}\" --namespace istio-system | sed 's/^.*apps/apps/')'/' istio-way.yaml | oc apply --filename -",
             "problemMatcher": []
         }
     ]

@@ -7,12 +7,12 @@ spec:
   selector:
     istio: ingressgateway
   servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - 'ms.apps.cluster-06df.06df.example.opentlc.com'
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "microservice.apps.cluster-b740.b740.example.opentlc.com"
 
 ---
 # See more at https://istio.io/docs/reference/config/networking/virtual-service/
@@ -22,19 +22,19 @@ metadata:
   name: microservice
 spec:
   hosts:
-  - 'ms.apps.cluster-06df.06df.example.opentlc.com'
-  gateways: 
-  - microservice
+    - "microservice.apps.cluster-b740.b740.example.opentlc.com"
+  gateways:
+    - microservice
   http:
-  - route:
-    - destination:
-        host: microservice-a
-        subset: green
-      weight: 50
-    - destination:
-        host: microservice-a
-        subhset: blue
-      weight: 50
+    - route:
+        - destination:
+            host: microservice-a
+            subset: green
+          weight: 50
+        - destination:
+            host: microservice-a
+            subhset: blue
+          weight: 50
 
 ---
 # See more at https://istio.io/docs/reference/config/networking/destination-rule/
@@ -45,9 +45,9 @@ metadata:
 spec:
   host: microservice-a
   subsets:
-  - name: blue
-    labels:
-      version: blue
-  - name: green 
-    labels:
-      version: green
+    - name: blue
+      labels:
+        version: blue
+    - name: green
+      labels:
+        version: green
