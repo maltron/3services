@@ -22,7 +22,7 @@ metadata:
   name: microservice
 spec:
   hosts:
-     - "*"
+    - "*"
   gateways:
     - microservice
   http:
@@ -33,7 +33,7 @@ spec:
           weight: 50
         - destination:
             host: microservice-a
-            subhset: blue
+            subset: blue
           weight: 50
 
 ---
