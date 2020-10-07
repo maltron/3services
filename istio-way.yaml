@@ -12,7 +12,7 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - "microservice.apps.cluster-b740.b740.example.opentlc.com"
+        - "*"
 
 ---
 # See more at https://istio.io/docs/reference/config/networking/virtual-service/
@@ -22,7 +22,7 @@ metadata:
   name: microservice
 spec:
   hosts:
-    - "microservice.apps.cluster-b740.b740.example.opentlc.com"
+     - "*"
   gateways:
     - microservice
   http:
